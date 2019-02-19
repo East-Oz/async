@@ -103,7 +103,7 @@ public:
 		ptrExecutor->subscribe( wptr );
 	}
 
-	void execute( std::vector<std::string>* commands, time_t* fct ) override
+	void execute( std::vector<std::string>* commands, time_t* fct = time(0) ) override
 	{
 		if( commands->size() > 0 )
 		{
@@ -188,8 +188,8 @@ private:
 	std::shared_ptr<Executor> m_pExecutor;
 	size_t m_nRowCount;
 	std::vector<std::string> m_Commands;
-	int m_nCount;
-	int m_nOpenBraces;
+	size_t m_nCount;
+	size_t m_nOpenBraces;
 };
 
 class ParserWrapper
