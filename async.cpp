@@ -1,6 +1,8 @@
 #include "async.h"
 #include <vector>
+#include <algorithm>
 #include "libasync.cpp"
+
 
 namespace async 
 {
