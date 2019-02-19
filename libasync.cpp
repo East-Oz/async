@@ -103,7 +103,7 @@ public:
 		ptrExecutor->subscribe( wptr );
 	}
 
-	void execute( std::vector<std::string>* commands, time_t* fct = time(0) ) override
+	void execute( std::vector<std::string>* commands, time_t* ) override
 	{
 		if( commands->size() > 0 )
 		{
