@@ -7,7 +7,7 @@ add_executable( test_async test_libasync.cpp )
 target_link_libraries(test_async async)
 
 
-set_target_properties( bulkmt PROPERTIES
+set_target_properties( async PROPERTIES
 	CXX_STANDARD 14
 	CXX_STANDARD_REQUIRED ON
 	COMPILE_OPTIONS "-Wpedantic;-Wall;-Wextra"
