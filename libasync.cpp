@@ -9,6 +9,7 @@
 #include <fstream>
 #include <sstream> 
 
+
 class Observer
 {
 public:
@@ -128,26 +129,28 @@ public:
 
 	void ParseStringData( std::string data_str )
 	{
-		std::istringstream stream( data_str );
-
 		bool is_ready_data = false;
 
 		m_nCount = m_Commands.size();
 		time_t fct = time( 0 );
-		std::string line;
 
-		for( std::string line; std::getline( stream, line );)
+		for( auto ch: data_str )
 		{
-			if( line.empty() )
+			if( ch == '\n' )
 			{
-				continue;
+				if( !m_sCommand.empty() )
+				{
+					m_Commands.push_back( m_sCommand );
+					m_nCount++;
+				}
+				m_sCommand = "";
 			}
-			m_nCount++;
-			if( m_nCount == 1 )
+
+			if( m_nCount == 0 )
 			{
 				fct = time( 0 );
 			}
-			if( line.find( '{' ) != std::string::npos )
+			if( ch == '{'  )
 			{
 				++m_nOpenBraces;
 				if( m_nOpenBraces == 1 )
@@ -155,7 +158,7 @@ public:
 					is_ready_data = true;
 				}
 			}
-			else if( (line.find( '}' ) != std::string::npos) && (m_nOpenBraces > 0) )
+			else if( ( ch == '}' ) && (m_nOpenBraces > 0) )
 			{
 				--m_nOpenBraces;
 				if( m_nOpenBraces == 0 )
@@ -165,12 +168,15 @@ public:
 			}
 			else if( (m_nCount == m_nRowCount) && (m_nOpenBraces == 0) )
 			{
-				m_Commands.push_back( line );
 				is_ready_data = true;
 			}
 			else
 			{
-				m_Commands.push_back( line );
+				if( ( ch > 0x19 ) && ( ch < 0x7f ) )
+				{
+					m_sCommand += ch;
+				}
+
 			}
 
 			if( is_ready_data )
@@ -180,7 +186,6 @@ public:
 				is_ready_data = false;
 				m_nCount = 0;
 			}
-			
 		}
 	}
 
@@ -188,6 +193,7 @@ private:
 	std::shared_ptr<Executor> m_pExecutor;
 	size_t m_nRowCount;
 	std::vector<std::string> m_Commands;
+	std::string m_sCommand;
 	size_t m_nCount;
 	size_t m_nOpenBraces;
 };
